@@ -1,6 +1,11 @@
 # vault-k8s-helper
 Helper application for managing vault in kubernetes clusters.
 
+Takes care of following aspects:
+* preparing a certificate for vault pods signed by cluster CA
+* initializing a new cluster
+* automatic unsealing existing cluster
+
 ## Helm chart usage
 
 [Helm](https://helm.sh) must be installed to use the charts.  Please refer to
