@@ -14,8 +14,10 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
+var MINVALIDDAYS int = 30
+
 func CheckSecretValidity(k8s *kubernetes.Clientset, ctx context.Context, name *string, namespace *string) (bool, error) {
-	minCertificateValid, err := time.ParseDuration(fmt.Sprintf("%dh", 30*24))
+	minCertificateValid, err := time.ParseDuration(fmt.Sprintf("%dh", MINVALIDDAYS*24))
 	if err != nil {
 		panic(err)
 	}
@@ -35,7 +37,7 @@ func CheckSecretValidity(k8s *kubernetes.Clientset, ctx context.Context, name *s
 		if err != nil {
 			log.Warnf("Couldn't parse certificate from secret, will recreate it")
 			return false, nil
-		} else if time.Until(*validBefore) > minCertificateValid {
+		} else if time.Until(*validBefore) < minCertificateValid {
 			log.Infof("Certificate is valid until %s, will be recreated", *validBefore)
 			return false, nil
 		} else {

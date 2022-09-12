@@ -35,14 +35,22 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+
+		err = k8sProvider.DeleteCSR(k8s, ctx, csrName)
+		if err != nil {
+			panic(err)
+		}
+
 		k8sCsr, err := k8sProvider.CreateCSR(k8s, ctx, csrName, csr)
 		if err != nil {
 			panic(err)
 		}
+
 		err = k8sProvider.ApproveCSR(k8s, ctx, csrName, k8sCsr)
 		if err != nil {
 			panic(err)
 		}
+
 		cert, err := k8sProvider.GetCSRCertificate(k8s, ctx, csrName)
 		if err != nil {
 			panic(err)

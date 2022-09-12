@@ -9,10 +9,8 @@ import (
 	log "github.com/sirupsen/logrus"
 	apicertificatesv1 "k8s.io/api/certificates/v1"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	certificatesv1 "k8s.io/client-go/applyconfigurations/certificates/v1"
-	applyMetaV1 "k8s.io/client-go/applyconfigurations/meta/v1"
-	v1 "k8s.io/client-go/applyconfigurations/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
 
@@ -21,31 +19,36 @@ var (
 	CSRRETRYSLEEP int = 5
 )
 
+// deletes CSR if it exists.
+func DeleteCSR(k8s *kubernetes.Clientset, ctx context.Context, name *string) error {
+	err := k8s.CertificatesV1().CertificateSigningRequests().Delete(ctx, *name, metav1.DeleteOptions{})
+	if errors.IsNotFound(err) {
+		log.Debugf("CSR delete didn't succeed because it was no longer there.")
+		return nil
+	}
+	return err
+}
+
+// creates new CSR
 func CreateCSR(k8s *kubernetes.Clientset, ctx context.Context, name *string, csr []byte) (*apicertificatesv1.CertificateSigningRequest, error) {
 	signerName := "kubernetes.io/kubelet-serving"
-	kind := "CertificateSigningRequest"
-	apiVersion := "certificates.k8s.io/v1"
 
-	csrApply := certificatesv1.CertificateSigningRequestApplyConfiguration{
-		ObjectMetaApplyConfiguration: &v1.ObjectMetaApplyConfiguration{
-			Name: name,
+	csrApply := apicertificatesv1.CertificateSigningRequest{
+		ObjectMeta: metav1.ObjectMeta{
+			Name: *name,
 		},
-		Spec: &certificatesv1.CertificateSigningRequestSpecApplyConfiguration{
+		Spec: apicertificatesv1.CertificateSigningRequestSpec{
 			Request:    csr,
 			Groups:     []string{"system:authenticated"},
-			SignerName: &signerName,
+			SignerName: signerName,
 			Usages: []apicertificatesv1.KeyUsage{
 				apicertificatesv1.UsageKeyEncipherment,
 				apicertificatesv1.UsageDigitalSignature,
 				apicertificatesv1.UsageServerAuth,
 			},
 		},
-		TypeMetaApplyConfiguration: applyMetaV1.TypeMetaApplyConfiguration{
-			Kind:       &kind,
-			APIVersion: &apiVersion,
-		},
 	}
-	crs, err := k8s.CertificatesV1().CertificateSigningRequests().Apply(ctx, &csrApply, metav1.ApplyOptions{FieldManager: FIELDMANAGER})
+	crs, err := k8s.CertificatesV1().CertificateSigningRequests().Create(ctx, &csrApply, metav1.CreateOptions{FieldManager: FIELDMANAGER})
 	return crs, err
 }
 
