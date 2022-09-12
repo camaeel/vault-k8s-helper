@@ -12,7 +12,7 @@ ENV LDFLAGS "-X 'main.VERSION=${RELEASE_VERSION}' "
 
 COPY . ./
 
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o bin/setup-tls github.com/camaeel/vault-k8s-helper/cmd/setup-tls
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o bin/setup-tls github.com/camaeel/vault-k8s-helper/cmd/setupTls
 
 FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
