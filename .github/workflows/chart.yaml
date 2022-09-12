@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - initial
+      - initial #TODO remove this
     paths:
       - "charts/**"
 
