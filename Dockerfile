@@ -12,10 +12,12 @@ ENV LDFLAGS "-X 'main.VERSION=${RELEASE_VERSION}' "
 
 COPY . ./
 
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o bin/setup-tls github.com/camaeel/vault-k8s-helper/cmd/setupTls
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o bin/setup-tls github.com/camaeel/vault-k8s-helper/cmd/setupTls && \
+  CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o bin/vault-autounseal github.com/camaeel/vault-k8s-helper/cmd/vaultAutounseal
 
 FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /app/bin/setup-tls /setup-tls
+COPY --from=builder /app/bin/vault-autounseal /vault-autounseal
 
 ENTRYPOINT ["/setup-tls"]
