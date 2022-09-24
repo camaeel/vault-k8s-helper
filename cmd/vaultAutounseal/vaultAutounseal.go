@@ -1,13 +1,18 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"time"
 
 	"github.com/camaeel/vault-k8s-helper/pkg/autounseal"
+	"github.com/camaeel/vault-k8s-helper/pkg/config"
+	"github.com/camaeel/vault-k8s-helper/pkg/k8sProvider"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
-	cfg := autounseal.Config{}
+	cfg := config.Config{}
 
 	flag.StringVar(&cfg.ServiceDomain, "service-domain", "vault-internal.vault.svc.cluster.local", "DNS Name for accessing vault. In HA mode should be set to vault headles service providing all pod endpoints.")
 	flag.StringVar(&cfg.ServiceScheme, "service-scheme", "https", "Vaul service scheme. Valid values: http, https")
@@ -16,12 +21,24 @@ func main() {
 	flag.IntVar(&cfg.UnlockThreshold, "unlock-threshold", 2, "Number of unlock shares threshold")
 	flag.StringVar(&cfg.VaultRootTokenSecret, "vault-root-token-secret", "vault-root-token", "Vault root token secret name")
 	flag.StringVar(&cfg.VaultUnlockKeysSecret, "vault-unlock-keys-secret", "vault-unlock-keys", "Vault unlock keys secret name")
+	flag.StringVar(&cfg.Namespace, "namespace", "vault-autounseal", "Namespace used for storing unseal keys and root token")
+	kubeconfig := flag.String("kubeconfig", "", "Overwrite kubeconfig path")
 
 	flag.Parse()
-	// ctx := context.TODO()
+	ctx := context.TODO()
+
+	k8s, err := k8sProvider.GetClientSet(kubeconfig)
+	if err != nil {
+		panic(err)
+	}
 
 	for {
-		autounseal.ManageVaultAutounseal(cfg)
+		err := autounseal.ManageVaultAutounseal(cfg, ctx, k8s)
+		if err != nil {
+			log.Errorf("received error: %v", err)
+		}
+		log.Debug("Sleeping")
+		time.Sleep(30 * time.Second)
 	}
 
 }

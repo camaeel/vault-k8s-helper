@@ -2,12 +2,13 @@ package k8sProvider
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/camaeel/vault-k8s-helper/pkg/certificates"
 	log "github.com/sirupsen/logrus"
-	"k8s.io/apimachinery/pkg/api/errors"
+	apiErrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	applyMetaV1 "k8s.io/client-go/applyconfigurations/meta/v1"
@@ -24,7 +25,7 @@ func CheckSecretValidity(k8s *kubernetes.Clientset, ctx context.Context, name *s
 
 	secret, err := k8s.CoreV1().Secrets(*namespace).Get(ctx, *name, metav1.GetOptions{})
 	if err != nil {
-		if errors.IsNotFound(err) {
+		if apiErrors.IsNotFound(err) {
 			log.Infof("Secret %s not found in namespace %s, so it will be created", *name, *namespace)
 			return false, nil
 		}
@@ -76,4 +77,15 @@ func CreateOrReplaceSecret(k8s *kubernetes.Clientset, ctx context.Context, name 
 		panic(err)
 	}
 	return nil
+}
+
+func GetSecretContents(k8s *kubernetes.Clientset, ctx context.Context, name *string, namespace *string) (map[string][]byte, error) {
+	secret, err := k8s.CoreV1().Secrets(*namespace).Get(ctx, *name, metav1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	if secret.Data == nil {
+		return nil, errors.New("secret data not found")
+	}
+	return secret.Data, nil
 }
