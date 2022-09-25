@@ -18,9 +18,9 @@ func main() {
 	flag.StringVar(&cfg.ServiceScheme, "service-scheme", "https", "Vaul service scheme. Valid values: http, https")
 	flag.IntVar(&cfg.ServicePort, "service-port", 8200, "Vaul service port")
 	flag.IntVar(&cfg.UnlockShares, "unlock-shares", 3, "Number of unlock shares")
-	flag.IntVar(&cfg.UnlockThreshold, "unlock-threshold", 2, "Number of unlock shares threshold")
-	flag.StringVar(&cfg.VaultRootTokenSecret, "vault-root-token-secret", "vault-root-token", "Vault root token secret name")
-	flag.StringVar(&cfg.VaultUnlockKeysSecret, "vault-unlock-keys-secret", "vault-unlock-keys", "Vault unlock keys secret name")
+	flag.IntVar(&cfg.UnlockThreshold, "unlock-threshold", 3, "Number of unlock shares threshold")
+	flag.StringVar(&cfg.VaultRootTokenSecret, "vault-root-token-secret", "vault-autounseal-root-token", "Vault root token secret name")
+	flag.StringVar(&cfg.VaultUnlockKeysSecret, "vault-unlock-keys-secret", "vault-autounseal-unlock-keys", "Vault unlock keys secret name")
 	flag.StringVar(&cfg.Namespace, "namespace", "vault-autounseal", "Namespace used for storing unseal keys and root token")
 	kubeconfig := flag.String("kubeconfig", "", "Overwrite kubeconfig path")
 
