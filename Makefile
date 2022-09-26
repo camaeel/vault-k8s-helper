@@ -41,3 +41,10 @@ docker_debug_kind_load: docker_debug
 
 autounseal_kind_debug: docker_debug docker_debug_kind_load
 	kubectl run --rm -it --image vault-k8s-helper:debug test --command -- dlv --listen=:2345 --headless=true --api-version=2 exec /vault-autounseal
+
+install_helm:
+	helm upgrade --install -n vault --create-namespace vault-cert-creator charts/vault-cert-creator  --set image.tag=local --set image.repository=vault-k8s-helper
+
+	helm upgrade --install -n vault --create-namespace vault vault --repo https://helm.releases.hashicorp.com/ --version 0.22.0 -f local/vault-values.yaml
+
+	helm upgrade --install -n vault-autounseal --create-namespace vault-autounseal charts/vault-autounseal --set image.tag=local --set image.repository=vault-k8s-helper

@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "vault-cert-creator.labels" . | nindent 4 }}
   annotations:
-    "helm.sh/hook": post-install
+    "helm.sh/hook": post-install,post-upgrade
 spec:
   template:
     metadata:
@@ -32,7 +32,7 @@ spec:
           args: 
           - -vault-secret={{ .Values.settings.tlsSecretName }}
           - -vault-csr={{ .Values.settings.csrName }}
-          - -vault-service={{ .Values.settings.vaultService }}
+          - -vault-services={{ .Values.settings.vaultServices }}
           - -vault-namespace={{ default .Release.Namespace .Values.settings.vaultNamespace }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

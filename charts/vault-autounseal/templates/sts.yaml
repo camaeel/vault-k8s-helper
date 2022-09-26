@@ -1,11 +1,13 @@
 apiVersion: apps/v1
-kind: Statefulset
+kind: StatefulSet
 metadata:
   name: {{ include "vault-autounseal.fullname" . }}
   labels:
     {{- include "vault-autounseal.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  updateStrategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       {{- include "vault-autounseal.selectorLabels" . | nindent 6 }}
@@ -27,6 +29,12 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          command: 
+          - /vault-autounseal
+          args: 
+          {{- range $k, $v := .Values.label1 }}
+            - {{ $k }}: {{ $v }}
+          {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"

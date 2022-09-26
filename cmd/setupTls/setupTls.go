@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"strings"
 
 	"github.com/camaeel/vault-k8s-helper/pkg/certificates"
 	"github.com/camaeel/vault-k8s-helper/pkg/k8sProvider"
@@ -14,7 +15,7 @@ func main() {
 	kubeconfig := flag.String("kubeconfig", "", "Overwrite kubeconfig path")
 	vaultNamespace := flag.String("vault-namespace", "vault", "Vault namespace")
 	vaultSecretName := flag.String("vault-secret", "vault-server-tls", "Secret containing vault TLS certificates")
-	vaultServiceName := flag.String("vault-service", "vault", "Vault service name")
+	vaultServiceNames := flag.String("vault-services", "vault,*.vault-internal", "Vault service name")
 	csrName := flag.String("vault-csr", "vault-server-tls", "Vault CSR name")
 	flag.Parse()
 	ctx := context.TODO()
@@ -31,7 +32,7 @@ func main() {
 
 	if !keepCertificate {
 		key := certificates.GenerateKey(4096)
-		csr, err := certificates.GetCSR(vaultServiceName, vaultNamespace, key)
+		csr, err := certificates.GetCSR(strings.Split(*vaultServiceNames, ","), vaultNamespace, key)
 		if err != nil {
 			panic(err)
 		}

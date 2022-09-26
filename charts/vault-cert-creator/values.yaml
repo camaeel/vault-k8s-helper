@@ -51,7 +51,7 @@ affinity: {}
 settings:
   tlsSecretName: vault-server-tls
   csrName: vault-server-tls
-  vaultService: vault
+  vaultServices: vault,*.vault-internal
   # By default vaultNamespace (namespace where vault is installed) should be the same as the namespace where this application is installed
   # vaultNamespace: vault
 

@@ -66,3 +66,13 @@ settings: {}
   # unlock-threshold: 3
   # vault-root-token-secret: vault-autounseal-root-token
   # vault-unlock-keys-secret: vault-autounseal-unlock-keys
+  # vault-pod-name-prefix: vault
+  # vault-internal-service-name: vault-internal
+  # vault-namespace: vault
+
+vault:
+  namespace: vault
+  # namespace where vault is installed
+  internalService: vault-internal
+  # vault-internal service name - headless service that points to the vault statefulSet nodes
+

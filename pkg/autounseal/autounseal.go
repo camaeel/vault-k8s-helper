@@ -3,7 +3,6 @@ package autounseal
 import (
 	"context"
 	"fmt"
-	"net"
 
 	"github.com/camaeel/vault-k8s-helper/pkg/config"
 	"github.com/camaeel/vault-k8s-helper/pkg/k8sProvider"
@@ -14,62 +13,73 @@ import (
 )
 
 func ManageVaultAutounseal(cfg config.Config, ctx context.Context, k8s *kubernetes.Clientset) error {
-	ips, err := net.LookupIP(cfg.ServiceDomain)
+
+	nodeNames, err := k8sProvider.GetServiceEndpoints(k8s, ctx, &cfg.VaultInternalServiceName, &cfg.VaultNamespace)
 	if err != nil {
 		return err
 	}
-	log.Infof("Found ips: %v", ips)
+
+	expectedFirstNodeName := fmt.Sprintf("%s-0", cfg.VaultPodNamePrefix)
+	if nodeNames[0] != expectedFirstNodeName {
+		return fmt.Errorf("First node %s is not equal to expected %s", nodeNames[0], expectedFirstNodeName)
+	}
 
 	nodes := make([]*vaultClient.Node, 0)
-	for i := range ips {
-		address := fmt.Sprintf("%s://%s:%d", cfg.ServiceScheme, ips[i].String(), cfg.ServicePort)
-		node, err := vaultClient.GetVaultClusterNode(ctx, address)
+	for n := range nodeNames {
+		node, err := vaultClient.GetVaultClusterNode(ctx, podEndpoint(cfg, nodeNames[n]), cfg)
 		if err != nil {
 			return err
 		}
 		nodes = append(nodes, node)
 	}
 
-	atLeastOneInitialized := false
-	allInitialized := true
+	for n := range nodes {
 
-	for i := range nodes {
-		atLeastOneInitialized = atLeastOneInitialized || nodes[i].Initialized
-		allInitialized = allInitialized && nodes[i].Initialized
-	}
+		if !nodes[n].Initialized {
+			if n == 0 {
+				//first node & needs initialization
+				log.Info("Initializing node %d", n)
+				keys, rootToken, err := nodes[n].Initialize(cfg, ctx)
+				if err != nil {
+					return err
+				}
+				// join for others - how?
+				// https://developer.hashicorp.com/vault/docs/platform/k8s/helm/examples/ha-with-raft
 
-	if !atLeastOneInitialized {
-		// do initialize
-		log.Info("no nodes initialized")
-		keys, rootToken, err := nodes[0].Initialize(cfg, ctx)
-		if err != nil {
-			return err
-		}
+				keysMap := mapVaultKeys(keys)
+				rootTokenMap := map[string][]byte{
+					"token": []byte(rootToken),
+				}
 
-		keysMap := mapVaultKeys(keys)
-		rootTokenMap := map[string][]byte{
-			"token": []byte(rootToken),
-		}
-
-		log.Info("creating secrets containg initialziation data")
-		k8sProvider.CreateOrReplaceSecret(k8s, ctx, &cfg.VaultUnlockKeysSecret, &cfg.Namespace, keysMap)
-		k8sProvider.CreateOrReplaceSecret(k8s, ctx, &cfg.VaultRootTokenSecret, &cfg.Namespace, rootTokenMap)
-
-	} else if !allInitialized { //only some are initialzied - shouldn't this be an error ???
-		log.Warn("Only some nodes are initialized")
-	} else {
-		log.Info("All nodes initialized")
-		keysMap, err := k8sProvider.GetSecretContents(k8s, ctx, &cfg.VaultUnlockKeysSecret, &cfg.Namespace)
-		if err != nil {
-			return err
-		}
-		for i := range nodes {
-			if !nodes[i].Sealed {
+				log.Infof("creating secrets containg initialziation data")
+				k8sProvider.CreateOrReplaceSecret(k8s, ctx, &cfg.VaultUnlockKeysSecret, &cfg.Namespace, keysMap)
+				k8sProvider.CreateOrReplaceSecret(k8s, ctx, &cfg.VaultRootTokenSecret, &cfg.Namespace, rootTokenMap)
+				log.Infof("secrets containg initialziation data created")
+			} else {
+				log.Infof("Joining node %d to existing cluster", n)
+				err := nodes[n].Join(cfg, ctx, nodes[0])
+				if err != nil {
+					return err
+				}
+				log.Infof("Joined node %d to existing cluster successfully", n)
+			}
+		} else {
+			log.Infof("Node %d already initialized.", n)
+			if nodes[n].Sealed {
+				log.Infof("Node %d sealed. Will try to unseal", n)
+				keysMap, err := k8sProvider.GetSecretContents(k8s, ctx, &cfg.VaultUnlockKeysSecret, &cfg.Namespace)
+				if err != nil {
+					return nil
+				}
 				keys := maps.Values(keysMap)
 				for k := range keys {
-					nodes[i].Unseal(ctx, string(keys[k]), k)
+					nodes[n].Unseal(ctx, string(keys[k]), k)
 				}
+
+			} else {
+				log.Infof("Node %d initialized and unsealed. Nothing to do", n)
 			}
+
 		}
 	}
 
@@ -82,4 +92,8 @@ func mapVaultKeys(keys []string) map[string][]byte {
 		ret[fmt.Sprintf("key-%d", k)] = []byte(keys[k])
 	}
 	return ret
+}
+
+func podEndpoint(cfg config.Config, nodeName string) string {
+	return fmt.Sprintf("%s://%s.%s:%d", cfg.ServiceScheme, nodeName, cfg.ServiceDomain, cfg.ServicePort)
 }

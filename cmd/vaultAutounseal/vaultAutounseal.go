@@ -22,6 +22,10 @@ func main() {
 	flag.StringVar(&cfg.VaultRootTokenSecret, "vault-root-token-secret", "vault-autounseal-root-token", "Vault root token secret name")
 	flag.StringVar(&cfg.VaultUnlockKeysSecret, "vault-unlock-keys-secret", "vault-autounseal-unlock-keys", "Vault unlock keys secret name")
 	flag.StringVar(&cfg.Namespace, "namespace", "vault-autounseal", "Namespace used for storing unseal keys and root token")
+	flag.StringVar(&cfg.CaCert, "ca-cert", "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt", "CA certificate for validating connections to vault")
+	flag.StringVar(&cfg.VaultPodNamePrefix, "vault-pod-name-prefix", "vault", "Prefix for vault StatefulSet's pods")
+	flag.StringVar(&cfg.VaultInternalServiceName, "vault-internal-service-name", "vault-internal", "Name of vault's internal service name")
+	flag.StringVar(&cfg.VaultNamespace, "vault-namespace", "vault", "namespace where vault is installed")
 	kubeconfig := flag.String("kubeconfig", "", "Overwrite kubeconfig path")
 
 	flag.Parse()

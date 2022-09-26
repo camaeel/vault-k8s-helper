@@ -2,6 +2,8 @@ package vaultClient
 
 import (
 	"context"
+	"fmt"
+	"io/ioutil"
 
 	"github.com/camaeel/vault-k8s-helper/pkg/config"
 	vault "github.com/hashicorp/vault/api"
@@ -34,4 +36,20 @@ func (n *Node) Unseal(ctx context.Context, key string, keyIndex int) error {
 	_, err := n.Client.Sys().UnsealWithContext(ctx, key)
 
 	return err
+}
+
+func (n *Node) Join(cfg config.Config, ctx context.Context, node0 *Node) error {
+	cacert, err := ioutil.ReadFile(cfg.CaCert)
+	input := vault.RaftJoinRequest{
+		LeaderAPIAddr: node0.Address,
+		LeaderCACert:  string(cacert),
+	}
+	resp, err := n.Client.Sys().RaftJoinWithContext(ctx, &input)
+	if err != nil {
+		return err
+	}
+	if !resp.Joined {
+		return fmt.Errorf("Raft join of node %s to %s not successful", n.Address, node0.Address)
+	}
+	return nil
 }

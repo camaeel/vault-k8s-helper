@@ -25,18 +25,21 @@ func GetValidNotAfter(certPEM []byte) (*time.Time, error) {
 	return &cert.NotAfter, nil
 }
 
-func GetCSR(serviceName *string, namespace *string, key *rsa.PrivateKey) ([]byte, error) {
+func GetCSR(serviceNames []string, namespace *string, key *rsa.PrivateKey) ([]byte, error) {
 	subject := pkix.Name{
 		Organization: []string{"system:nodes"},
-		CommonName:   fmt.Sprintf("system:node:%s.%s.svc", *serviceName, *namespace),
+		CommonName:   fmt.Sprintf("system:node:%s.%s.svc", serviceNames[0], *namespace),
 	}
-	altNames := []string{
-		*serviceName,
-		fmt.Sprintf("%s.%s", *serviceName, *namespace),
-		fmt.Sprintf("%s.%s.svc", *serviceName, *namespace),
-		fmt.Sprintf("%s.%s.svc.cluster", *serviceName, *namespace),
-		fmt.Sprintf("%s.%s.svc.cluster.local", *serviceName, *namespace),
+	altNames := []string{}
+	for i := range serviceNames {
+		altNames = append(altNames,
+			serviceNames[i],
+			fmt.Sprintf("%s.%s", serviceNames[i], *namespace),
+			fmt.Sprintf("%s.%s.svc", serviceNames[i], *namespace),
+			fmt.Sprintf("%s.%s.svc.cluster", serviceNames[i], *namespace),
+			fmt.Sprintf("%s.%s.svc.cluster.local", serviceNames[i], *namespace))
 	}
+
 	ipAddresses := []net.IP{net.IPv4(127, 0, 0, 1)}
 
 	csr, err := generateCSR(key, &subject, altNames, ipAddresses)
