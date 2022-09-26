@@ -38,7 +38,7 @@ func ManageVaultAutounseal(cfg config.Config, ctx context.Context, k8s *kubernet
 		if !nodes[n].Initialized {
 			if n == 0 {
 				//first node & needs initialization
-				log.Info("Initializing node %d", n)
+				log.Infof("Initializing node %d", n)
 				keys, rootToken, err := nodes[n].Initialize(cfg, ctx)
 				if err != nil {
 					return err
@@ -52,8 +52,14 @@ func ManageVaultAutounseal(cfg config.Config, ctx context.Context, k8s *kubernet
 				}
 
 				log.Infof("creating secrets containg initialziation data")
-				k8sProvider.CreateOrReplaceSecret(k8s, ctx, &cfg.VaultUnlockKeysSecret, &cfg.Namespace, keysMap)
-				k8sProvider.CreateOrReplaceSecret(k8s, ctx, &cfg.VaultRootTokenSecret, &cfg.Namespace, rootTokenMap)
+				err = k8sProvider.CreateOrReplaceSecret(k8s, ctx, &cfg.VaultUnlockKeysSecret, &cfg.Namespace, keysMap)
+				if err != nil {
+					return err
+				}
+				err = k8sProvider.CreateOrReplaceSecret(k8s, ctx, &cfg.VaultRootTokenSecret, &cfg.Namespace, rootTokenMap)
+				if err != nil {
+					return err
+				}
 				log.Infof("secrets containg initialziation data created")
 			} else {
 				log.Infof("Joining node %d to existing cluster", n)
@@ -73,7 +79,11 @@ func ManageVaultAutounseal(cfg config.Config, ctx context.Context, k8s *kubernet
 				}
 				keys := maps.Values(keysMap)
 				for k := range keys {
-					nodes[n].Unseal(ctx, string(keys[k]), k)
+					err := nodes[n].Unseal(ctx, string(keys[k]), k)
+					if err != nil {
+						log.Errorf("unable to unseal node %d: %v", n, err)
+						continue
+					}
 				}
 
 			} else {

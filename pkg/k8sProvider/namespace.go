@@ -22,8 +22,8 @@ func CreateNamespaceIfNotExists(k8s *kubernetes.Clientset, ctx context.Context, 
 			},
 		}
 
-		k8s.CoreV1().Namespaces().Create(ctx, &ns, metav1.CreateOptions{})
-		return nil
+		_, err = k8s.CoreV1().Namespaces().Create(ctx, &ns, metav1.CreateOptions{})
+
 	} else if err == nil {
 		log.Infof("Namespace %s found", *name)
 	}

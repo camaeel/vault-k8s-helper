@@ -18,7 +18,10 @@ func newVaultClient(ctx context.Context, address string, cfg config.Config) (*va
 	tlsConfig := vault.TLSConfig{
 		CACert: cfg.CaCert,
 	}
-	config.ConfigureTLS(&tlsConfig)
+	err := config.ConfigureTLS(&tlsConfig)
+	if err != nil {
+		return nil, err
+	}
 
 	client, err := vault.NewClient(config)
 	if err != nil {

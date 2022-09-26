@@ -70,9 +70,8 @@ func ApproveCSR(k8s *kubernetes.Clientset, ctx context.Context, name *string, cs
 func GetCSRCertificate(k8s *kubernetes.Clientset, ctx context.Context, name *string) (csrContent []byte, err error) {
 	log.Infof("Waiting for CSR %s to have certificate generated...", *name)
 	var csr *apicertificatesv1.CertificateSigningRequest
-	var count int = 0
 
-	for count = 0; count < MAXCSRRETRIES; count++ {
+	for count := 0; count < MAXCSRRETRIES; count++ {
 		csr, err = k8s.CertificatesV1().CertificateSigningRequests().Get(ctx, *name, metav1.GetOptions{})
 		if err != nil {
 			return

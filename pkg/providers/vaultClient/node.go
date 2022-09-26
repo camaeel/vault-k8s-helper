@@ -40,6 +40,9 @@ func (n *Node) Unseal(ctx context.Context, key string, keyIndex int) error {
 
 func (n *Node) Join(cfg config.Config, ctx context.Context, node0 *Node) error {
 	cacert, err := ioutil.ReadFile(cfg.CaCert)
+	if err != nil {
+		return err
+	}
 	input := vault.RaftJoinRequest{
 		LeaderAPIAddr: node0.Address,
 		LeaderCACert:  string(cacert),
