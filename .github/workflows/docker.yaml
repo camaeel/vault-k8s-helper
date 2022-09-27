@@ -82,7 +82,7 @@ jobs:
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' && github.event_name != 'scheduled'}}
+          push: ${{ github.event_name != 'pull_request' && github.event_name != 'schedule'}}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
@@ -112,7 +112,7 @@ jobs:
       # transparency data even for private images, pass --force to cosign below.
       # https://github.com/sigstore/cosign
       - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' && github.event_name != 'scheduled'}}
+        if: ${{ github.event_name != 'pull_request' && github.event_name != 'schedule'}}
         env:
           COSIGN_EXPERIMENTAL: "true"
         # This step uses the identity token to provision an ephemeral certificate
