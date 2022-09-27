@@ -38,7 +38,7 @@ Prefered way of instalation is using helm charts. Simplest setup can be achieved
     ```
 1. Install vault
     ```bash
-    helm upgrade --install -n vault --create-namespace vault vault --repo https://helm.releases.hashicorp.com/ --version 0.22.0 -f local/vault-values.yaml
+    helm upgrade --install -n vault --create-namespace vault vault --repo https://helm.releases.hashicorp.com/ --version 0.22.0 -f example/vault/vault-values.yaml
     ```
 1. Install vault-autounseal
     ```bash
