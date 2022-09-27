@@ -24,6 +24,16 @@ entries:
   vault-cert-creator:
   - apiVersion: v2
     appVersion: v1.0.0
+    created: "2022-09-27T22:04:25.01570081Z"
+    description: A Helm chart for Kubernetes
+    digest: 825e17c1112e71e7280bb652074bd94d55b515b5800b6cb3b7b0056cb42a2c99
+    name: vault-cert-creator
+    type: application
+    urls:
+    - https://github.com/camaeel/vault-k8s-helper/releases/download/vault-cert-creator-1.0.1/vault-cert-creator-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
+    appVersion: v1.0.0
     created: "2022-09-27T21:28:13.856296685Z"
     description: A Helm chart for Kubernetes
     digest: 1c9ff19a76ae5fb5f3c1459d46ea8bcbf9fe50a4eafb2af90fa1f712cdb614cc
@@ -42,4 +52,4 @@ entries:
     urls:
     - https://github.com/camaeel/vault-k8s-helper/releases/download/vault-cert-creator-0.0.1/vault-cert-creator-0.0.1.tgz
     version: 0.0.1
-generated: "2022-09-27T21:28:13.856306785Z"
+generated: "2022-09-27T22:04:25.015715611Z"
