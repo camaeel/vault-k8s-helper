@@ -14,10 +14,15 @@ If you had already added this repo earlier, run `helm repo update` to retrieve
 the latest versions of the packages.  You can then run `helm search repo
 vault-k8s-helper` to see the charts.
 
-To install the vault-k8s-helper chart:
+In the repo there are following charts:
+* vault-cert-creator
+* vault-autounseal
 
-    helm install vault-k8s-helper vault-k8s-helper/vault-k8s-helper
+
+To install the <CHART> chart:
+
+    helm install RELEASE-NAME vault-k8s-helper/<CHART>
 
 To uninstall the chart:
 
-    helm delete vault-k8s-helper
+    helm delete RELEASE-NAME
