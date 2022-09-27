@@ -1,0 +1,11 @@
+.code
+.idea
+.vscode
+charts/
+*.md
+.git
+.gitignore
+.github
+.dockerignore
+Dockerfile
+Makefile
