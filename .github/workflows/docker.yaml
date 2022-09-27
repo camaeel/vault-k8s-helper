@@ -90,8 +90,8 @@ jobs:
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
 
-      - name: Build and push Docker image
-        id: build-and-push
+      - name: Build and push Docker image for PR
+        id: build-and-push-pr
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'schedule'}}
         with:
