@@ -11,7 +11,7 @@ ARG TARGETARCH
 
 COPY . ./
 
-RUN \ 
+RUN \
   CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o bin/setup-tls github.com/camaeel/vault-k8s-helper/cmd/setupTls && \
   CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o bin/vault-autounseal github.com/camaeel/vault-k8s-helper/cmd/vaultAutounseal
 

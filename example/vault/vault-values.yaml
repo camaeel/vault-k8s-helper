@@ -212,7 +212,7 @@ server:
     #   name: my-secret
     #   path: null # default is `/vault/userconfig`
 
- 
+
 
   extraEnvironmentVars:
     VAULT_CACERT: "/run/secrets/kubernetes.io/serviceaccount/ca.crt"

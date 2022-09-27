@@ -29,9 +29,9 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          command: 
+          command:
           - /vault-autounseal
-          args: 
+          args:
           {{- range $k, $v := .Values.label1 }}
             - {{ $k }}: {{ $v }}
           {{- end }}

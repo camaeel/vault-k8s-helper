@@ -34,8 +34,8 @@ docker_kind_load: docker
 	kind load docker-image vault-k8s-helper:local
 
 install_helm:
-	helm upgrade --install -n vault --create-namespace vault-cert-creator charts/vault-cert-creator  --set image.tag=local --set image.repository=vault-k8s-helper
+	helm upgrade --install -n vault --create-namespace vault-cert-creator charts/vault-cert-creator
 
-	helm upgrade --install -n vault --create-namespace vault vault --repo https://helm.releases.hashicorp.com/ --version 0.22.0 -f local/vault-values.yaml
+	helm upgrade --install -n vault --create-namespace vault vault --repo https://helm.releases.hashicorp.com/ --version 0.22.0 -f example/vault/vault-values.yaml
 
-	helm upgrade --install -n vault-autounseal --create-namespace vault-autounseal charts/vault-autounseal --set image.tag=local --set image.repository=vault-k8s-helper
+	helm upgrade --install -n vault-autounseal --create-namespace vault-autounseal charts/vault-autounseal

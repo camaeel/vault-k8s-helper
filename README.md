@@ -9,7 +9,7 @@ Takes care of following aspects:
 
 Application consists of 2 commands:
 1. setup-tls - creates certificates for vault cluster signed by cluster's CA
-1. vault-autounseal - initialzies, stores secrets and unseals vault. 
+1. vault-autounseal - initialzies, stores secrets and unseals vault.
 
 ## Helm chart usage
 
@@ -26,7 +26,7 @@ vault-k8s-helper` to see the charts.
 
 Helm repository has 2 helm charts:
 1. vault-cert-creator - which installs setup-tls tool and provides secrets for the vault. It will also renew certificates if they are near to be expired
-1. vault-autounseal - this chart sets up vault-autounseal utility which is responsible for initializing and establishing a new cluster and unsealing sealed pods. 
+1. vault-autounseal - this chart sets up vault-autounseal utility which is responsible for initializing and establishing a new cluster and unsealing sealed pods.
 
 
 # Installation
@@ -34,7 +34,7 @@ Helm repository has 2 helm charts:
 Prefered way of instalation is using helm charts. Simplest setup can be achieved using following steps:
 1. Install setup-tls:
     ```bash
-    helm upgrade --install -n vault --create-namespace vault-cert-creator vault-cert-creator --repo https://camaeel.github.io/vault-k8s-helper/ 
+    helm upgrade --install -n vault --create-namespace vault-cert-creator vault-cert-creator --repo https://camaeel.github.io/vault-k8s-helper/
     ```
 1. Install vault
     ```bash
@@ -42,5 +42,5 @@ Prefered way of instalation is using helm charts. Simplest setup can be achieved
     ```
 1. Install vault-autounseal
     ```bash
-    helm upgrade --install -n vault-autounseal --create-namespace vault-autounseal vault-autounseal --repo https://camaeel.github.io/vault-k8s-helper/ 
+    helm upgrade --install -n vault-autounseal --create-namespace vault-autounseal vault-autounseal --repo https://camaeel.github.io/vault-k8s-helper/
     ```

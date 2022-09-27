@@ -62,7 +62,7 @@ settings: {}
   # service-domain: vault-internal.vault.svc.cluster.local
   # service-port: 8200
   # service-scheme: https
-  # unlock-shares: 3 
+  # unlock-shares: 3
   # unlock-threshold: 3
   # vault-root-token-secret: vault-autounseal-root-token
   # vault-unlock-keys-secret: vault-autounseal-unlock-keys
@@ -75,4 +75,3 @@ vault:
   # namespace where vault is installed
   internalService: vault-internal
   # vault-internal service name - headless service that points to the vault statefulSet nodes
-

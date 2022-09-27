@@ -29,7 +29,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: 
+          args:
           - -vault-secret={{ .Values.settings.tlsSecretName }}
           - -vault-csr={{ .Values.settings.csrName }}
           - -vault-services={{ .Values.settings.vaultServices }}
