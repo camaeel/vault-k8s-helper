@@ -40,7 +40,7 @@ func GetCSR(serviceNames []string, namespace *string, key *rsa.PrivateKey) ([]by
 			fmt.Sprintf("%s.%s.svc.cluster.local", serviceNames[i], *namespace))
 	}
 
-	ipAddresses := []net.IP{net.IPv4(127, 0, 0, 1)}
+	ipAddresses := []net.IP{}
 
 	csr, err := generateCSR(key, &subject, altNames, ipAddresses)
 	if err != nil {
