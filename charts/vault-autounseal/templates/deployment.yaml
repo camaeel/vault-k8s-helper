@@ -6,8 +6,6 @@ metadata:
     {{- include "vault-autounseal.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  updateStrategy:
-    type: RollingUpdate
   selector:
     matchLabels:
       {{- include "vault-autounseal.selectorLabels" . | nindent 6 }}
