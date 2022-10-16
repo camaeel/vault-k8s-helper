@@ -9,3 +9,4 @@ charts/
 .dockerignore
 Dockerfile
 Makefile
+example

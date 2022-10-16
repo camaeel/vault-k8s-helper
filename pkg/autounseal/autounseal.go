@@ -51,7 +51,7 @@ func ManageVaultAutounseal(cfg config.Config, ctx context.Context, k8s *kubernet
 					"token": []byte(rootToken),
 				}
 
-				log.Infof("creating secrets containg initialziation data")
+				log.Infof("creating secrets containg initialization data")
 				err = k8sProvider.CreateOrReplaceSecret(k8s, ctx, &cfg.VaultUnlockKeysSecret, &cfg.Namespace, keysMap)
 				if err != nil {
 					return err
@@ -60,14 +60,7 @@ func ManageVaultAutounseal(cfg config.Config, ctx context.Context, k8s *kubernet
 				if err != nil {
 					return err
 				}
-				log.Infof("secrets containg initialziation data created")
-			} else {
-				log.Infof("Joining node %d to existing cluster", n)
-				err := nodes[n].Join(cfg, ctx, nodes[0])
-				if err != nil {
-					return err
-				}
-				log.Infof("Joined node %d to existing cluster successfully", n)
+				log.Infof("secrets containg initialization data created")
 			}
 		} else {
 			log.Infof("Node %d already initialized.", n)
