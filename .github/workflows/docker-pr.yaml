@@ -8,6 +8,8 @@ name: Docker for PR & cron
 on:
   pull_request:
     branches: [ "master" ]
+    paths-ignore:
+      - "charts/**"
   schedule:
     - cron: '30 16 * * 2'
 
