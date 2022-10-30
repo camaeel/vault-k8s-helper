@@ -30,7 +30,7 @@ spec:
           command:
           - /vault-autounseal
           args:
-          {{- range $k, $v := .Values.label1 }}
+          {{- range $k, $v := .Values.settings }}
             - {{ $k }}: {{ $v }}
           {{- end }}
           securityContext:
