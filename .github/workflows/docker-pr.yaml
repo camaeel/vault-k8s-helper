@@ -61,16 +61,10 @@ jobs:
           platforms: linux/amd64
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
 
-      - uses: jungwinter/split@v2
-        id: split
-        with:
-          msg: ${{ steps.meta.outputs.tags }}
-          separator: '\n'
-
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ steps.split.outputs._0 }}
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.imageid }}
           format: 'table'
           ignore-unfixed: true
           exit-code: 1
