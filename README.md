@@ -49,3 +49,7 @@ Prefered way of instalation is using helm charts. Simplest setup can be achieved
 ## Root token
 
 To obtain root token you can: `kubectl get secret -ojson -n vault-autounseal vault-autounseal-root-token | jq -r '.data.token' | base64 -d`
+
+## Configuration
+
+Vault client library used in `vault-autounseal` can be also configured using vault's env variables: https://github.com/hashicorp/vault/blob/api/v1.8.2/api/client.go#L36
