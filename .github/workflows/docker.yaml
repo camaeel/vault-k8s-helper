@@ -92,6 +92,7 @@ jobs:
         id: split
         with:
           msg: ${{ steps.meta.outputs.tags }}
+          separator: '\n'
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
