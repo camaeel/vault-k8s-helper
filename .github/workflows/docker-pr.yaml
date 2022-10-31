@@ -55,7 +55,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          load: true
           outputs: type=tar,dest=image.tar
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
