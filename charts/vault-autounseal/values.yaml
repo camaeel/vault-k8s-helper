@@ -80,4 +80,14 @@ vault:
 # deployment
 extraEnvironmentVars: {}
   # VAULT_SKIP_VERIFY: "true"
-  
+
+volumes: null
+  # - name: volume-ca-chain
+  #   secret:
+  #     defaultMode: 420
+  #     secretName: ca-chain
+
+volumeMounts: null
+  # - mountPath: /tmp/ca-chain
+  #   name: volume-ca-chain
+  #   readOnly: true

@@ -72,3 +72,25 @@ Inject extra environment vars in the format key:value, if populated
 {{- end }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Set's up configmap mounts if this isn't a dev deployment and the user
+defined a custom configuration.  Additionally iterates over any
+extra volumes the user may have specified (such as a secret with TLS).
+*/}}
+{{- define "vault-autounseal.volumes" -}}
+{{- if .Values.volumes }}
+    {{- toYaml .Values.volumes | nindent 8}}
+  {{- end }}
+{{- end -}}
+
+
+{{/*
+Set's which additional volumes should be mounted to the container
+based on the mode configured.
+*/}}
+{{- define "vault-autounseal.volumeMounts" -}}
+  {{- if .Values.volumeMounts }}
+    {{- toYaml .Values.volumeMounts | nindent 12}}
+  {{- end }}
+{{- end -}}
