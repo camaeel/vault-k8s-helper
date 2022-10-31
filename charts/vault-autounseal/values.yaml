@@ -75,3 +75,19 @@ vault:
   # namespace where vault is installed
   internalService: vault-internal
   # vault-internal service name - headless service that points to the vault statefulSet nodes
+
+# extraEnvironmentVars is a list of extra environment variables to set in the
+# deployment
+extraEnvironmentVars: {}
+  # VAULT_SKIP_VERIFY: "true"
+
+volumes: []
+  # - name: volume-ca-chain
+  #   secret:
+  #     defaultMode: 420
+  #     secretName: ca-chain
+
+volumeMounts: []
+  # - mountPath: /tmp/ca-chain
+  #   name: volume-ca-chain
+  #   readOnly: true
