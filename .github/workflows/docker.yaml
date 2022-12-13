@@ -94,7 +94,7 @@ jobs:
           image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}
           format: 'template'
           ignore-unfixed: true
-          exit-code: 1
+          exit-code: 0
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results.sarif'
           severity: 'MEDIUM,CRITICAL,HIGH'
