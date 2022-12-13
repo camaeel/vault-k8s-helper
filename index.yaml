@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   vault-autounseal:
   - apiVersion: v2
+    appVersion: v1.1.1
+    created: "2022-12-13T20:43:22.227979312Z"
+    description: A Helm chart for Kubernetes
+    digest: 94d3c6d1fb1d6b03a1c8ec5e3622836ba940f837ef62e7ff135fc86ab2d16d13
+    name: vault-autounseal
+    type: application
+    urls:
+    - https://github.com/camaeel/vault-k8s-helper/releases/download/vault-autounseal-1.1.1/vault-autounseal-1.1.1.tgz
+    version: 1.1.1
+  - apiVersion: v2
     appVersion: v1.1.0
     created: "2022-10-31T21:15:48.729996586Z"
     description: A Helm chart for Kubernetes
@@ -73,6 +83,16 @@ entries:
     version: 0.1.0
   vault-cert-creator:
   - apiVersion: v2
+    appVersion: v1.1.1
+    created: "2022-12-13T20:43:22.360246297Z"
+    description: A Helm chart for Kubernetes
+    digest: e3eb2d0e6b6c312cddc35afbe9a7e25b21af9b1ce20a3a03694aa37d1cb7aa93
+    name: vault-cert-creator
+    type: application
+    urls:
+    - https://github.com/camaeel/vault-k8s-helper/releases/download/vault-cert-creator-1.0.3/vault-cert-creator-1.0.3.tgz
+    version: 1.0.3
+  - apiVersion: v2
     appVersion: v1.0.1
     created: "2022-09-28T20:48:39.383821293Z"
     description: A Helm chart for Kubernetes
@@ -112,4 +132,4 @@ entries:
     urls:
     - https://github.com/camaeel/vault-k8s-helper/releases/download/vault-cert-creator-0.0.1/vault-cert-creator-0.0.1.tgz
     version: 0.0.1
-generated: "2022-10-31T21:15:48.730029886Z"
+generated: "2022-12-13T20:43:22.360284098Z"
