@@ -60,13 +60,11 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}
           format: 'template'
           ignore-unfixed: true
           exit-code: 0
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results.sarif'
-#          severity: 'MEDIUM,CRITICAL,HIGH'
 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
