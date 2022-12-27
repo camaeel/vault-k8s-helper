@@ -1,4 +1,4 @@
-name: Docker for PR & cron
+name: Docker for cron
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -61,6 +61,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           format: 'template'
+          input: image.tar
           ignore-unfixed: true
           exit-code: 0
           template: '@/contrib/sarif.tpl'
