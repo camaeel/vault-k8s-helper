@@ -53,3 +53,4 @@ To obtain root token you can: `kubectl get secret -ojson -n vault-autounseal vau
 ## Configuration
 
 Vault client library used in `vault-autounseal` can be also configured using vault's env variables: https://github.com/hashicorp/vault/blob/api/v1.8.2/api/client.go#L36
+
