@@ -6,7 +6,7 @@ require (
 	github.com/hashicorp/vault/api v1.9.1
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826
 	github.com/prometheus/common v0.9.1
-	github.com/sirupsen/logrus v1.9.0
+	github.com/sirupsen/logrus v1.9.2
 	golang.org/x/exp v0.0.0-20221217163422-3c43f8badb15
 	k8s.io/api v0.26.0
 	k8s.io/apimachinery v0.26.0
