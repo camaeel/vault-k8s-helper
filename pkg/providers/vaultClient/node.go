@@ -7,7 +7,7 @@ import (
 
 	"github.com/camaeel/vault-k8s-helper/pkg/config"
 	vault "github.com/hashicorp/vault/api"
-	"github.com/prometheus/common/log"
+	log "github.com/sirupsen/logrus"
 )
 
 type Node struct {
