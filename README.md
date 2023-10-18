@@ -1,3 +1,7 @@
+# DEPRECATED
+
+This project is archivised and deprecated. Its features are covererd by [Bank Vault](https://bank-vaults.dev/) operator.
+
 # vault-k8s-helper
 Helper application for managing vault with Raft storage & TLS in kubernetes clusters.
 
