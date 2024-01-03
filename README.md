@@ -1,6 +1,10 @@
 # DEPRECATED
 
-This project is archivised and deprecated. Its features are covererd by [Bank Vault](https://bank-vaults.dev/) operator.
+This project is archivised and deprecated. Its features are covered with other projects:
+* tls certificate generation can be done with cert-manager using selfsigned CertificateIssuer
+* Unseal can be set up using [bank-vaults](https://bank-vaults.dev/) CLI. 
+
+An example how to setup vault cluster using automated unseal with bank-vaults and certificates generated with cert manager can be found in my demo project: [vault-k8s-setup](https://github.com/camaeel/vault-k8s-setup)
 
 # vault-k8s-helper
 Helper application for managing vault with Raft storage & TLS in kubernetes clusters.
