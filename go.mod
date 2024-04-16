@@ -6,7 +6,7 @@ require (
 	github.com/hashicorp/vault/api v1.9.2
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826
 	github.com/sirupsen/logrus v1.9.3
-	golang.org/x/exp v0.0.0-20230725093048-515e97ebf090
+	golang.org/x/exp v0.0.0-20240416160154-fe59bbe5cc7f
 	k8s.io/api v0.27.4
 	k8s.io/apimachinery v0.27.4
 	k8s.io/client-go v0.27.4
