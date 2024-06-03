@@ -2,7 +2,9 @@
 
 ## DEPRECATION NOTICE
 
-This project is deprecated and is superseeded by [vault-autounseal-operator](https://github.com/camaeel/vault-autounseal-operator)!
+**This project is deprecated and is superseeded by [vault-autounseal-operator](https://github.com/camaeel/vault-autounseal-operator)!**
+
+## Description
 
 Helper application for managing vault with Raft storage & TLS in kubernetes clusters.
 
