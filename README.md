@@ -1,4 +1,9 @@
 # vault-k8s-helper
+
+## DEPRECATION NOTICE
+
+This project is deprecated and is superseeded by [vault-autounseal-operator](https://github.com/camaeel/vault-autounseal-operator)!
+
 Helper application for managing vault with Raft storage & TLS in kubernetes clusters.
 
 Takes care of following aspects:
